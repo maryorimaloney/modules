@@ -51,3 +51,8 @@ void* qremove(queue_t *qp,
  */
 void qconcat(queue_t *q1p, queue_t *q2p);
 
+/* Additional funcs */
+void qprint(queue_t* qp, void (*print_func)(void*));
+void print_int(void* data);
+void print_str(void* data);
+void sum_ming(void *elementp);
