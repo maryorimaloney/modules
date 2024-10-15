@@ -56,3 +56,5 @@ void qprint(queue_t* qp, void (*print_func)(void*));
 void print_int(void* data);
 void print_str(void* data);
 void sum_ming(void *elementp);
+bool search_integer(void* elementp, const void* keyp);
+bool search_string(void* elementp, const void* keyp);
