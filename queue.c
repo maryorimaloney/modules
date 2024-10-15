@@ -136,15 +136,67 @@ void* qsearch(queue_t *qp, bool (*searchfn)(void* elementp,const void* keyp), co
 	}
 	return NULL; // no matching elements found
 }
-/*
-void* qremove(queue_t *qp, bool (*searchfn)(void* elementp,const void* keyp), const void* skeyp) {
-
-}
 
 void* qremove(queue_t *qp, bool (*searchfn)(void* elementp,const void* keyp), const void* skeyp) {
+	pqueue_t* pq = (pqueue_t*) qp; // pointer for pq
+	node_t* current = pq->front;
+	node_t* previous = NULL;
 
+	/* traversing the queue */
+	while (current != NULL) {
+
+		if (searchfn(current->data, skeyp)) {
+			/* if is the front */
+			if (previous == NULL) {
+				pq->front = current->next;
+			} else {
+				previous->next = current->next; // link previous to next node
+			}
+
+			/* if element is in the back*/
+			if (current->next == NULL) {
+				pq->back = previous; //update pointer
+			}
+
+			void* data = current->data;
+			free(current);
+
+			return data;
+		}
+		/* Moving to next element */
+		previous = current;
+		current = current->next;
+	}
+
+	return NULL;
 }
-*/
+
+/* concatenatenates elements of q2 into q1
+ * q2 is dealocated, closed, and unusable upon completion
+ */
+void qconcat(queue_t *q1p, queue_t *q2p) {
+	pqueue_t* q1 = (pqueue_t*) q1p;
+	pqueue_t* q2 = (pqueue_t*) q2p;
+	/* checking if q2 is empty */
+	if (q2->front == NULL) {
+		printf("Second Queue is Empty!");
+		free(q2);
+		return;
+	}
+
+	/* checking q1 (empty?) */
+	if (q1->front == NULL) {
+		// if empty we will point to q2
+		q1->front = q2->front;
+		q1->back = q2->back;
+	} else {
+		// if q1 is not empty we will concatenate it with q2
+		q1->back->next = q2->front;
+		q1->back = q2->back; // the new end of the queue
+	}
+
+	free(q2); //freeing it 
+}
 
 /*__________________ADDITIONAL FUNCTIONS_____________________ */
 
